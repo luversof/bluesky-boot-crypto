@@ -11,9 +11,7 @@
 		<version>3.1.0</version>
 	</parent>
 	<name>${project.groupId}:${project.artifactId}</name>
-	<description>It is a library that lists and shows the methods of the
-		controller and the utility static methods used for development
-		confirmation.</description>
+	<description>A library used in spring boot projects to encrypt the values of properties.</description>
 	<url>https://github.com/luversof/bluesky-boot-crypto</url>
 
 	<properties>
