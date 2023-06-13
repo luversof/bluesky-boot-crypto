@@ -35,12 +35,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-annotations</artifactId>
-			<optional>true</optional>
-		</dependency>
-
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
@@ -57,33 +51,8 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>io.projectreactor</groupId>
-			<artifactId>reactor-test</artifactId>
-			<scope>test</scope>
-		</dependency>
 		<!-- (e) test -->
 
-		<!-- (s) servlet web -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.tomcat.embed</groupId>
-			<artifactId>tomcat-embed-core</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<!-- (e) servlet web -->
-
-		<!-- (s) webflux -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webflux</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<!-- (e) webflux -->
 
 		<!-- (s) logging logback -->
 		<dependency>
@@ -95,7 +64,7 @@
 
 	</dependencies>
 
-	<inceptionYear>2021</inceptionYear>
+	<inceptionYear>2023</inceptionYear>
 	<licenses>
 		<license>
 			<name>Apache License, Version 2.0</name>
@@ -106,11 +75,11 @@
 
 	<scm>
 		<connection>
-			scm:git:git://github.com/luversof/bluesky-boot-autoconfigure-devcheck.git</connection>
+			scm:git:git://github.com/luversof/bluesky-boot-crypto.git</connection>
 		<developerConnection>
-			scm:git:ssh://github.com:luversof/bluesky-boot-autoconfigure-devcheck.git</developerConnection>
+			scm:git:ssh://github.com:luversof/bluesky-boot-crypto.git</developerConnection>
 		<url>
-			http://github.com/luversof/bluesky-boot-autoconfigure-devcheck/tree/main</url>
+			http://github.com/luversof/bluesky-boot-crypto/tree/main</url>
 	</scm>
 
 	<developers>
