@@ -19,17 +19,25 @@ public class TextEncryptorFactories {
 	
 	public static DelegatingTextEncryptor getDelegatingTextEncryptor() {
 		if (delegatingTextEncryptor == null) {
-			createDelegatingTextEncryptor();
+			return createDelegatingTextEncryptor();
 		}
-		
 		return delegatingTextEncryptor;
 	}
 
+	/**
+	 * 별도 Encryptor를 지정하지 않은 경우 기본 샘플 Encryptor 를 사용
+	 * @return
+	 */
 	public static DelegatingTextEncryptor createDelegatingTextEncryptor() {
-		var textEncryptorMap = new HashMap<String, TextEncryptor>();
-		textEncryptorMap.putAll(getDefaultTextEncryptorMap());
-		delegatingTextEncryptor = new DelegatingTextEncryptor(defaultTextEncryptorId, textEncryptorMap);
-		return delegatingTextEncryptor;
+		return new DelegatingTextEncryptor(defaultTextEncryptorId, getDefaultTextEncryptorMap());
+	}
+	
+	public static DelegatingTextEncryptor createDelegatingTextEncryptor(String defaultTextEncryptorId, TextEncryptor textEncryptor) {
+		return new DelegatingTextEncryptor(defaultTextEncryptorId, Map.of(defaultTextEncryptorId, textEncryptor));
+	}
+	
+	public static DelegatingTextEncryptor createDelegatingTextEncryptor(String defaultTextEncryptorId, Map<String, TextEncryptor> textEncryptorMap) {
+		return new DelegatingTextEncryptor(defaultTextEncryptorId, textEncryptorMap);
 	}
 	
 	private static Map<String, TextEncryptor> getDefaultTextEncryptorMap() {

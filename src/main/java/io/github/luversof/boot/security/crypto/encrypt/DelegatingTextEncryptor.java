@@ -129,16 +129,6 @@ public class DelegatingTextEncryptor implements TextEncryptor {
 		return textEncryptorId;
 	}
 	
-	public DelegatingTextEncryptor addTextEncryptor(String textEncryptorId, TextEncryptor textEncryptor) {
-		this.textEncryptorMap.put(textEncryptorId, textEncryptor);
-		return this;
-	}
-	
-	public DelegatingTextEncryptor addTextEncryptor(Map<String, TextEncryptor> textEncryptorMap) {
-		this.textEncryptorMap.putAll(textEncryptorMap);
-		return this;
-	}
-	
 	private String extractEncryptedText(String encryptedText) {
 		if (encryptedText == null) {
 			return encryptedText;
@@ -163,4 +153,15 @@ public class DelegatingTextEncryptor implements TextEncryptor {
 	public Set<String> textEncryptorMapKeySet() {
 		return this.textEncryptorMap.keySet();
 	}
+	
+	public DelegatingTextEncryptor addTextEncryptor(String textEncryptorId, TextEncryptor textEncryptor) {
+		this.textEncryptorMap.put(textEncryptorId, textEncryptor);
+		return this;
+	}
+	
+	public DelegatingTextEncryptor addTextEncryptor(Map<String, TextEncryptor> textEncryptorMap) {
+		this.textEncryptorMap.putAll(textEncryptorMap);
+		return this;
+	}	
+
 }
