@@ -140,6 +140,15 @@ You can use these encrypted values in properties.
 ```properties
 someValue={text}98300b76125b1badd91745b15ef542c385a0df80837410b3c854df34a93ff351
 ```
+<!--
+각 properties의 암호화된 value는 그대로 유지되며 복호화된 값은 별도의 properties로 저장되어 우선 호출되어 사용됩니다.
+
+actuator를 사용한 경우 `/actuator/env` 에서 암호화 값의 처리를 확인할 수 있습니다.
+-->
+
+The encrypted value of each property remains intact, and the decrypted value is stored as a separate property and is called and used first.
+
+If you used actuator, you can see the handling of encrypted values in `/actuator/env`.
 
 ## version history
 
