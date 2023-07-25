@@ -53,7 +53,9 @@ class TextEncryptorTests {
 	@Test
 	void test() {
 		var encryptor = Encryptors.text("password", "c2174fcfa78656f5");
-		var decryptText = encryptor.decrypt("66e3bfc1f5bcfb2a3b7b1d44f1db416b6c9a38571233cc139a64d358fe0e20a0");
+		var encryptText = encryptor.encrypt("test");
+		log.debug("encryptText : {}", encryptText);
+		var decryptText = encryptor.decrypt(encryptText);
 		log.debug("decryptText : {}", decryptText);
 	}
 }
