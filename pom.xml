@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.1.2</version>
+		<version>3.1.4</version>
 	</parent>
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>A library used in spring boot projects to encrypt the values of
@@ -17,10 +17,10 @@
 
 	<properties>
 		<java.version>17</java.version>
-		<maven-plugin-plugin.version>3.7.0</maven-plugin-plugin.version>
+		<maven-plugin-plugin.version>3.9.0</maven-plugin-plugin.version>
 		<nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
-		<maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
-		<maven-release-plugin.version>2.5.3</maven-release-plugin.version>
+		<maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
+		<maven-release-plugin.version>3.0.1</maven-release-plugin.version>
 	</properties>
 
 	<dependencies>
