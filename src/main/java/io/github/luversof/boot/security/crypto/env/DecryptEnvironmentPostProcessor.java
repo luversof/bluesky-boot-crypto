@@ -37,7 +37,7 @@ public class DecryptEnvironmentPostProcessor implements EnvironmentPostProcessor
 	private DelegatingTextEncryptor textEncryptor;
 	
 	public DecryptEnvironmentPostProcessor() {
-		textEncryptor = (DelegatingTextEncryptor) TextEncryptorFactories.getDelegatingTextEncryptor();
+		textEncryptor = TextEncryptorFactories.getDelegatingTextEncryptor();
 	}
 
 	@Override
