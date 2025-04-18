@@ -1,7 +1,11 @@
 package io.github.luversof.boot.security.crypto;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
+import org.springframework.core.io.support.SpringFactoriesLoader;
 import org.springframework.security.crypto.encrypt.Encryptors;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.crypto.keygen.KeyGenerators;
 
 import io.github.luversof.boot.security.crypto.factory.TextEncryptorFactories;
@@ -57,5 +61,12 @@ class TextEncryptorTests {
 		log.debug("encryptText : {}", encryptText);
 		var decryptText = encryptor.decrypt(encryptText);
 		log.debug("decryptText : {}", decryptText);
+	}
+	
+	@Test
+	void springFactoriesLoaderTest() {
+		List<TextEncryptor> factories = SpringFactoriesLoader.loadFactories(TextEncryptor.class, null);
+		
+		log.debug("factories : {}", factories);
 	}
 }
