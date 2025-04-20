@@ -1,0 +1,4 @@
+
+io.github.luversof.boot.security.crypto.encrypt.BlueskyTextEncryptor=\
+io.github.luversof.boot.security.crypto.encrypt.NoOpBlueskyTextEncryptor,\
+io.github.luversof.boot.security.crypto.encrypt.NoOpBlueskyTextEncryptor2

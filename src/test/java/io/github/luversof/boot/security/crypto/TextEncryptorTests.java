@@ -5,9 +5,9 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.support.SpringFactoriesLoader;
 import org.springframework.security.crypto.encrypt.Encryptors;
-import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.crypto.keygen.KeyGenerators;
 
+import io.github.luversof.boot.security.crypto.encrypt.BlueskyTextEncryptor;
 import io.github.luversof.boot.security.crypto.factory.TextEncryptorFactories;
 import lombok.extern.slf4j.Slf4j;
 
@@ -65,8 +65,7 @@ class TextEncryptorTests {
 	
 	@Test
 	void springFactoriesLoaderTest() {
-		List<TextEncryptor> factories = SpringFactoriesLoader.loadFactories(TextEncryptor.class, null);
-		
+		List<BlueskyTextEncryptor> factories = SpringFactoriesLoader.loadFactories(BlueskyTextEncryptor.class, BlueskyTextEncryptor.class.getClassLoader());
 		log.debug("factories : {}", factories);
 	}
 }

@@ -1,6 +1,3 @@
 org.springframework.boot.env.EnvironmentPostProcessor=\
 io.github.luversof.boot.security.crypto.env.DecryptEnvironmentPostProcessor
 
-
-org.springframework.security.crypto.encrypt.TextEncryptor=\
-org.springframework.security.crypto.encrypt.Encryptors.NoOpTextEncryptor
