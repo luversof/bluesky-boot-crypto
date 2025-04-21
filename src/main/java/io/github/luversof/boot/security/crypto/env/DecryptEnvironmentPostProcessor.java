@@ -2,8 +2,10 @@ package io.github.luversof.boot.security.crypto.env;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
@@ -14,7 +16,10 @@ import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.PropertySource;
 import org.springframework.core.env.PropertySources;
 import org.springframework.core.env.SystemEnvironmentPropertySource;
+import org.springframework.core.io.support.SpringFactoriesLoader;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 
+import io.github.luversof.boot.security.crypto.encrypt.BlueskyTextEncryptor;
 import io.github.luversof.boot.security.crypto.encrypt.DelegatingTextEncryptor;
 import io.github.luversof.boot.security.crypto.factory.TextEncryptorFactories;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +39,22 @@ public class DecryptEnvironmentPostProcessor implements EnvironmentPostProcessor
 	private DelegatingTextEncryptor textEncryptor;
 	
 	public DecryptEnvironmentPostProcessor() {
-		textEncryptor = TextEncryptorFactories.getDelegatingTextEncryptor();
+		List<BlueskyTextEncryptor> blueskyTextEncryptorList = SpringFactoriesLoader.loadFactories(BlueskyTextEncryptor.class, BlueskyTextEncryptor.class.getClassLoader());
+		
+		if (blueskyTextEncryptorList.isEmpty()) {
+			textEncryptor = TextEncryptorFactories.getDelegatingTextEncryptor();
+			return;
+		}
+		
+		BlueskyTextEncryptor defaultEncryptor = null;
+		if (blueskyTextEncryptorList.stream().anyMatch(BlueskyTextEncryptor::isDefaultEncryptor)) {
+			defaultEncryptor = blueskyTextEncryptorList.stream().filter(BlueskyTextEncryptor::isDefaultEncryptor).findFirst().orElseGet(() -> null);
+		} else {
+			defaultEncryptor = blueskyTextEncryptorList.get(0);
+		}
+		Map<String, TextEncryptor> blueskyTextEncryptorMap = blueskyTextEncryptorList.stream().collect(Collectors.toMap(BlueskyTextEncryptor::getEncryptorId, blueskyTextEncryptor -> blueskyTextEncryptor));
+		
+		textEncryptor = TextEncryptorFactories.createDelegatingTextEncryptor(defaultEncryptor.getEncryptorId(), blueskyTextEncryptorMap);
 	}
 
 	@Override

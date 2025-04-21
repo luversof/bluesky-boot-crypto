@@ -65,7 +65,7 @@ class TextEncryptorTests {
 	
 	@Test
 	void springFactoriesLoaderTest() {
-		List<BlueskyTextEncryptor> factories = SpringFactoriesLoader.loadFactories(BlueskyTextEncryptor.class, BlueskyTextEncryptor.class.getClassLoader());
-		log.debug("factories : {}", factories);
+		List<BlueskyTextEncryptor> blueskyTextEncryptorList = SpringFactoriesLoader.loadFactories(BlueskyTextEncryptor.class, BlueskyTextEncryptor.class.getClassLoader());
+		log.debug("factories : {}", blueskyTextEncryptorList);
 	}
 }

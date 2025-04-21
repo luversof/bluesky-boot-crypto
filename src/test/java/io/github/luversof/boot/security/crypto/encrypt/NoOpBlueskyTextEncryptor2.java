@@ -19,7 +19,7 @@ public class NoOpBlueskyTextEncryptor2 implements BlueskyTextEncryptor {
 
 	@Override
 	public String getEncryptorId() {
-		return "noOpText";
+		return "noOpText2";
 	}
 
 }
