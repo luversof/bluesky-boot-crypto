@@ -146,6 +146,19 @@ public class DelegatingTextEncryptor implements TextEncryptor {
 		return encryptedText.substring(end + 1);
 	}
 	
+	/**
+	 * Encryptor를 직접 사용하는 경우
+	 * @param textEncryptorId
+	 * @return
+	 */
+	public TextEncryptor getEncryptor(String textEncryptorId) {
+		if (!textEncryptorMap.containsKey(textEncryptorId)) {
+			throw new IllegalArgumentException("textEncryptorId " + textEncryptorId + "is not found in textEncryptorMap" + textEncryptorMap);
+		}
+		
+		return this.textEncryptorMap.get(textEncryptorId);
+	}
+	
 	public boolean isTextEncryptorMapEmpty() {
 		return CollectionUtils.isEmpty(this.textEncryptorMap);
 	}

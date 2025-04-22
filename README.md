@@ -150,6 +150,23 @@ The encrypted value of each property remains intact, and the decrypted value is 
 
 If you used actuator, you can see the handling of encrypted values in `/actuator/env`.
 
+<!--
+
+Spring Boot application이 시작될때 `DecryptEnvironmentPostProcessor` 가 실행되는 시점(prepareEnvironment 단계)에 각 개별 프로젝트가 `@PropertySource` 로 지정한 properties는 로드되지 않습니다.
+(prepareContext 단계에 로드되며 prepareEnvironment 단계 이후입니다.)
+
+따라서 `@PropertySource` 로 호출된 properties 에서 암호화를 사용하는 경우 복호화를 위해 bluesky-boot-crypto 가 제공하는 `DecryptPropertySourceFactory` 를 지정해야 합니다.
+-->
+
+
+```java
+@Configuration
+@PropertySource(value = "classpath:data-mongodb-webcontents-${net-profile}.properties", factory = DecryptPropertySourceFactory.class)
+public class SomeConfiguration {
+
+}
+```
+
 ## version history
 
 | version | prerequisites |

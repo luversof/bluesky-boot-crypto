@@ -54,6 +54,14 @@ class TextEncryptorTests {
 		
 	}
 	
+	
+	@Test
+	void textEncryptorFactoriesTest() {
+		var delegatingTextEncryptor = TextEncryptorFactories.getDelegatingTextEncryptor();
+		var encryptedText = delegatingTextEncryptor.encrypt("text", "암호화할 값");
+		log.debug("encryptedText : {}", encryptedText);
+	}
+	
 	@Test
 	void test() {
 		var encryptor = Encryptors.text("password", "c2174fcfa78656f5");
