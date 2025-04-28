@@ -8,11 +8,10 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.4</version>
+		<version>3.4.5</version>
 	</parent>
 	<name>${project.groupId}:${project.artifactId}</name>
-	<description>A library used in spring boot projects to encrypt the values of
-		properties.</description>
+	<description>A library used in spring boot projects to encrypt the values of properties.</description>
 	<url>https://github.com/luversof/bluesky-boot-crypto</url>
 
 	<properties>
