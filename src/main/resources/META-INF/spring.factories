@@ -1,2 +1,3 @@
 org.springframework.boot.env.EnvironmentPostProcessor=\
 io.github.luversof.boot.security.crypto.env.DecryptEnvironmentPostProcessor
+
