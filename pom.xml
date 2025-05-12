@@ -16,10 +16,9 @@
 
 	<properties>
 		<java.version>21</java.version>
-		<maven-plugin-plugin.version>3.15.1</maven-plugin-plugin.version>
-		<nexus-staging-maven-plugin.version>1.7.0</nexus-staging-maven-plugin.version>
-		<maven-gpg-plugin.version>3.2.7</maven-gpg-plugin.version>
-		<maven-release-plugin.version>3.1.1</maven-release-plugin.version>
+		<!-- (s) central -->
+		<central-publishing-maven-plugin.version>0.7.0</central-publishing-maven-plugin.version>
+		<!-- (e) central -->
 	</properties>
 
 	<dependencies>
@@ -74,12 +73,9 @@
 	</licenses>
 
 	<scm>
-		<connection>
-			scm:git:git://github.com/luversof/bluesky-boot-crypto.git</connection>
-		<developerConnection>
-			scm:git:ssh://github.com:luversof/bluesky-boot-crypto.git</developerConnection>
-		<url>
-			http://github.com/luversof/bluesky-boot-crypto/tree/main</url>
+		<connection>scm:git:git://github.com/luversof/bluesky-boot-crypto.git</connection>
+		<developerConnection>scm:git:ssh://github.com:luversof/bluesky-boot-crypto.git</developerConnection>
+		<url>http://github.com/luversof/bluesky-boot-crypto/tree/main</url>
 	</scm>
 
 	<developers>
@@ -94,71 +90,18 @@
 			<id>local</id>
 		</profile>
 		<profile>
-			<id>deploy</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
+			<id>central</id>
 			<build>
 				<plugins>
 					<plugin>
-						<groupId>org.sonatype.plugins</groupId>
-						<artifactId>nexus-staging-maven-plugin</artifactId>
-						<version>${nexus-staging-maven-plugin.version}</version>
+						<groupId>org.sonatype.central</groupId>
+						<artifactId>central-publishing-maven-plugin</artifactId>
+						<version>${central-publishing-maven-plugin.version}</version>
 						<extensions>true</extensions>
 						<configuration>
-							<serverId>ossrh</serverId>
-							<nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-							<autoReleaseAfterClose>true</autoReleaseAfterClose>
+							<publishingServerId>central</publishingServerId>
+							<autoPublish>true</autoPublish>
 						</configuration>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-gpg-plugin</artifactId>
-						<version>${maven-gpg-plugin.version}</version>
-						<executions>
-							<execution>
-								<id>sign-artifacts</id>
-								<phase>verify</phase>
-								<goals>
-									<goal>sign</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-release-plugin</artifactId>
-						<version>${maven-release-plugin.version}</version>
-						<configuration>
-							<autoVersionSubmodules>true</autoVersionSubmodules>
-							<useReleaseProfile>false</useReleaseProfile>
-							<releaseProfiles>release</releaseProfiles>
-							<goals>deploy</goals>
-						</configuration>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-source-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>attach-sources</id>
-								<goals>
-									<goal>jar-no-fork</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-javadoc-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>attach-javadocs</id>
-								<goals>
-									<goal>jar</goal>
-								</goals>
-							</execution>
-						</executions>
 					</plugin>
 				</plugins>
 			</build>
@@ -175,14 +118,17 @@
 		</plugins>
 	</reporting>
 
-	<distributionManagement>
-		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
+	<repositories>
 		<repository>
-			<id>ossrh</id>
-			<url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+			<name>Central Portal Snapshots</name>
+			<id>central-portal-snapshots</id>
+			<url>https://central.sonatype.com/repository/maven-snapshots/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
 		</repository>
-	</distributionManagement>
+	</repositories>
 </project>
