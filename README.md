@@ -39,7 +39,7 @@ Adding the maven dependencies will set up the provided `DecryptEnvironmentPostPr
     <dependency>
         <groupId>io.github.luversof</groupId>
         <artifactId>bluesky-boot-crypto</artifactId> 
-        <version>3.1.0-SNAPSHOT</version> 
+        <version>${currentVersion}</version> 
     </dependency>
 </dependencies>
 ```
