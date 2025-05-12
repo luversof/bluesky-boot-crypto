@@ -42,8 +42,8 @@ public class TextEncryptorFactories {
 	
 	private static Map<String, TextEncryptor> getDefaultTextEncryptorMap() {
 		var textEncryptorMap = new HashMap<String, TextEncryptor>();
-		textEncryptorMap.put("text", Encryptors.text("pass", "8560b4f4b3"));
-		textEncryptorMap.put("delux", Encryptors.delux("pass", "8560b4f4b3"));
+		textEncryptorMap.put("text", Encryptors.text("pass", "076e1bf7569c999e"));
+		textEncryptorMap.put("delux", Encryptors.delux("pass", "076e1bf7569c999e"));
 		return textEncryptorMap;
 	}
 }

@@ -39,7 +39,7 @@ Adding the maven dependencies will set up the provided `DecryptEnvironmentPostPr
     <dependency>
         <groupId>io.github.luversof</groupId>
         <artifactId>bluesky-boot-crypto</artifactId> 
-        <version>3.1.0</version> 
+        <version>${currentVersion}</version> 
     </dependency>
 </dependencies>
 ```
@@ -127,7 +127,7 @@ void encryptTest() {
 You can see the results below.
 
 ```
-encryptText : {text}98300b76125b1badd91745b15ef542c385a0df80837410b3c854df34a93ff351
+encryptText : {text}6c270bf715a00a3337a5526e13738b10e412359d2bfcb2fa4e6760f92dd7c152
 decryptText : true, test text!!!
 ```
 
@@ -138,7 +138,7 @@ decryptText : true, test text!!!
 You can use these encrypted values in properties.
 
 ```properties
-someValue={text}98300b76125b1badd91745b15ef542c385a0df80837410b3c854df34a93ff351
+someValue={text}6c270bf715a00a3337a5526e13738b10e412359d2bfcb2fa4e6760f92dd7c152
 ```
 <!--
 각 properties의 암호화된 value는 그대로 유지되며 복호화된 값은 별도의 properties로 저장되어 우선 호출되어 사용됩니다.
@@ -172,3 +172,4 @@ public class SomeConfiguration {
 | version | prerequisites |
 | ------------- | ------------- |
 | 3.1.0 | Java 17, Spring Boot 3.1.0 |
+| 3.4.0 | Java 17, Spring Boot 3.4.0 |

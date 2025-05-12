@@ -18,10 +18,14 @@ class TextEncryptorTests {
 	void encrypTest() {
 		var text = "test text!!!";
 		
+		// create random salt
+		var salt = KeyGenerators.string().generateKey();
+		log.debug("salt : {}", salt);
+		
 		log.debug("keyGenerator : {}", KeyGenerators.string().generateKey());
 		
 		{
-			var encryptor = Encryptors.text("password", "8560b4f4b3");
+			var encryptor = Encryptors.text("password", "076e1bf7569c999e");
 			var encryptText = encryptor.encrypt(text);
 			log.debug("encryptText : {}", encryptText);
 			var decryptText = encryptor.decrypt(encryptText);
@@ -29,7 +33,7 @@ class TextEncryptorTests {
 		}
 		
 		{
-			var encryptor = Encryptors.delux("pass", "8560b4f4b3");
+			var encryptor = Encryptors.delux("pass", "076e1bf7569c999e");
 			var encryptText = encryptor.encrypt(text);
 			log.debug("encryptText : {}", encryptText);
 			var decryptText = encryptor.decrypt(encryptText);
