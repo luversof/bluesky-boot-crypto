@@ -55,8 +55,8 @@ If you don't set anything else, the two encryptors provided in the default sampl
 ```java
 private static Map<String, TextEncryptor> getDefaultTextEncryptorMap() {
 	var textEncryptorMap = new HashMap<String, TextEncryptor>();
-	textEncryptorMap.put("text", Encryptors.text("pass", "8560b4f4b3"));
-	textEncryptorMap.put("delux", Encryptors.delux("pass", "8560b4f4b3"));
+	textEncryptorMap.put("text", Encryptors.text("pass", "076e1bf7569c999e"));
+	textEncryptorMap.put("delux", Encryptors.delux("pass", "076e1bf7569c999e"));
 	return textEncryptorMap;
 }
 ```
@@ -127,7 +127,7 @@ void encryptTest() {
 You can see the results below.
 
 ```
-encryptText : {text}6c270bf715a00a3337a5526e13738b10e412359d2bfcb2fa4e6760f92dd7c152
+encryptText : {text}07d9e2cf09288e43b8d706a2bdcfcee95490fb91f022056fc6d523ff3fc1d3f50aa4c1ae078761c285a03257049cd62d
 decryptText : true, test text!!!
 ```
 
@@ -138,7 +138,7 @@ decryptText : true, test text!!!
 You can use these encrypted values in properties.
 
 ```properties
-someValue={text}6c270bf715a00a3337a5526e13738b10e412359d2bfcb2fa4e6760f92dd7c152
+someValue={text}07d9e2cf09288e43b8d706a2bdcfcee95490fb91f022056fc6d523ff3fc1d3f50aa4c1ae078761c285a03257049cd62d
 ```
 <!--
 각 properties의 암호화된 value는 그대로 유지되며 복호화된 값은 별도의 properties로 저장되어 우선 호출되어 사용됩니다.
