@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.5</version>
+		<version>3.5.6</version>
 	</parent>
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>A library used in spring boot projects to encrypt the values of properties.</description>
@@ -17,7 +17,7 @@
 	<properties>
 		<java.version>21</java.version>
 		<!-- (s) central -->
-		<central-publishing-maven-plugin.version>0.8.0</central-publishing-maven-plugin.version>
+		<central-publishing-maven-plugin.version>0.9.0</central-publishing-maven-plugin.version>
 		<maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
 		<!-- (e) central -->
 	</properties>
