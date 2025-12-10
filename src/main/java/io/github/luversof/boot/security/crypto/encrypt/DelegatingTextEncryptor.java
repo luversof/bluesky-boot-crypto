@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.util.CollectionUtils;
-
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * 암복호화 처리를 복수로 사용할 수 있도록 제공하기 위해 사용
@@ -17,8 +17,9 @@ import lombok.extern.slf4j.Slf4j;
  * @author bluesky
  *
  */
-@Slf4j
 public class DelegatingTextEncryptor implements TextEncryptor {
+	
+	private static final Logger log = LoggerFactory.getLogger(DelegatingTextEncryptor.class);
 	
 	private static final String DEFAULT_ID_PREFIX = "{";
 

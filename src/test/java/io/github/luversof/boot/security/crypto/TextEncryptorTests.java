@@ -5,15 +5,17 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.support.SpringFactoriesLoader;
 import org.springframework.security.crypto.encrypt.Encryptors;
 
 import io.github.luversof.boot.security.crypto.encrypt.BlueskyTextEncryptor;
 import io.github.luversof.boot.security.crypto.factory.TextEncryptorFactories;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 class TextEncryptorTests {
+	
+	private static final Logger log = LoggerFactory.getLogger(TextEncryptorTests.class);
 
 	@ParameterizedTest
 	@EnumSource(TextEncryptorTestsData.class)

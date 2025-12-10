@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.EnvironmentPostProcessor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.core.Ordered;
@@ -22,10 +24,10 @@ import org.springframework.security.crypto.encrypt.TextEncryptor;
 import io.github.luversof.boot.security.crypto.encrypt.BlueskyTextEncryptor;
 import io.github.luversof.boot.security.crypto.encrypt.DelegatingTextEncryptor;
 import io.github.luversof.boot.security.crypto.factory.TextEncryptorFactories;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class DecryptEnvironmentPostProcessor implements EnvironmentPostProcessor, Ordered {
+	
+	private static final Logger log = LoggerFactory.getLogger(DecryptEnvironmentPostProcessor.class);
 	
 	/**
 	 * Name of the decrypted property source.

@@ -7,11 +7,10 @@ import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 
 import io.github.luversof.boot.security.crypto.encrypt.DelegatingTextEncryptor;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TextEncryptorFactories {
+	
+	private TextEncryptorFactories() {}
 	
 	private static DelegatingTextEncryptor delegatingTextEncryptor;
 	
