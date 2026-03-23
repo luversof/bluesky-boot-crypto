@@ -20,7 +20,7 @@ public class DecryptPropertySourceFactory implements PropertySourceFactory {
 	@Override
 	public PropertySource<?> createPropertySource(String name, EncodedResource resource) throws IOException {
 		var properties = PropertiesLoaderUtils.loadProperties(resource);
-		properties.replaceAll((key, value) -> {
+		properties.replaceAll((_, value) -> {
 			String valueString = value.toString();
 			if (!textEncryptor.isEncrypted(valueString)) {
 				return value;
