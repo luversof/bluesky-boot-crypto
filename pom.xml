@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.luversof</groupId>
 	<artifactId>bluesky-boot-crypto</artifactId>
-	<version>4.0.0-SNAPSHOT</version>
+	<version>4.1.0-SNAPSHOT</version>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>4.0.7</version>
+		<version>4.1.0</version>
 	</parent>
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>A library used in spring boot projects to encrypt the values of properties.</description>
