@@ -2,10 +2,8 @@ package io.github.luversof.boot.security.crypto.env;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +16,7 @@ import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.PropertySource;
 import org.springframework.core.env.PropertySources;
 import org.springframework.core.env.SystemEnvironmentPropertySource;
-import org.springframework.core.io.support.SpringFactoriesLoader;
-import org.springframework.security.crypto.encrypt.TextEncryptor;
 
-import io.github.luversof.boot.security.crypto.encrypt.BlueskyTextEncryptor;
 import io.github.luversof.boot.security.crypto.encrypt.DelegatingTextEncryptor;
 import io.github.luversof.boot.security.crypto.factory.TextEncryptorFactories;
 
@@ -38,25 +33,10 @@ public class DecryptEnvironmentPostProcessor implements EnvironmentPostProcessor
 
 	private int order = Ordered.LOWEST_PRECEDENCE;
 	
-	private DelegatingTextEncryptor textEncryptor;
+	private final DelegatingTextEncryptor textEncryptor;
 	
 	public DecryptEnvironmentPostProcessor() {
-		List<BlueskyTextEncryptor> blueskyTextEncryptorList = SpringFactoriesLoader.loadFactories(BlueskyTextEncryptor.class, BlueskyTextEncryptor.class.getClassLoader());
-		
-		if (blueskyTextEncryptorList.isEmpty()) {
-			textEncryptor = TextEncryptorFactories.getDelegatingTextEncryptor();
-			return;
-		}
-		
-		BlueskyTextEncryptor defaultEncryptor = null;
-		if (blueskyTextEncryptorList.stream().anyMatch(BlueskyTextEncryptor::isDefaultEncryptor)) {
-			defaultEncryptor = blueskyTextEncryptorList.stream().filter(BlueskyTextEncryptor::isDefaultEncryptor).findFirst().orElseGet(() -> null);
-		} else {
-			defaultEncryptor = blueskyTextEncryptorList.get(0);
-		}
-		Map<String, TextEncryptor> blueskyTextEncryptorMap = blueskyTextEncryptorList.stream().collect(Collectors.toMap(BlueskyTextEncryptor::getEncryptorId, blueskyTextEncryptor -> blueskyTextEncryptor));
-		
-		textEncryptor = TextEncryptorFactories.createDelegatingTextEncryptor(defaultEncryptor.getEncryptorId(), blueskyTextEncryptorMap);
+		this.textEncryptor = TextEncryptorFactories.getDelegatingTextEncryptor();
 	}
 
 	@Override
@@ -156,13 +136,11 @@ public class DecryptEnvironmentPostProcessor implements EnvironmentPostProcessor
 		String value = original;
 		try {
 			value = textEncryptor.decrypt(value);
-			log.debug("Decrypted: key=" + key);
+			log.debug("Decrypted: key={}", key);
 			return value;
 		}
-		catch (Exception e) {
-			String message = "Cannot decrypt: key=" + key;
-			log.warn(message, e);
-			throw new IllegalStateException(message, e);
+		catch (RuntimeException e) {
+			throw new IllegalStateException("Cannot decrypt: key=" + key, e);
 		}
 	}
 

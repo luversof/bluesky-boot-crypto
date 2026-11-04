@@ -20,8 +20,8 @@ The encryption method of DelegatingPasswordEncoder used by spring-security is im
 
 **Prerequisites**
 
-- [Java 17](https://openjdk.java.net/)
-- [Spring Boot 3.1.0](https://spring.io/)
+- [Java 25](https://openjdk.java.net/)
+- [Spring Boot 4.1](https://spring.io/)
 
 ## settings
 
@@ -62,21 +62,36 @@ private static Map<String, TextEncryptor> getDefaultTextEncryptorMap() {
 ```
 
 <!--
-사용하려는 `TextEncryptor` 가 있다면 application 시작 전에 해당 `TextEncryptor` 를 `TextEncryptorFactories` 에 추가하면 됩니다.
-
-여러 개의 `TextEncrpytor` 를 추가할 수 있으며 하나만 추가한 경우 해당 `TextEncrptor` 가 기본 textEncryptor가 되며 여러 개를 추가하는 경우 그 중 하나를 default `TextEncryptor` 로 지정하면 됩니다.
+기본 비밀번호와 salt 는 코드에 공개되어 있어 암호화라기보다 가리기 수준입니다.
+시스템 프로퍼티나 환경변수로 바꿀 수 있습니다. 바꾸면 기존 기본 키로 암호화한 값은 풀리지 않으니 다시 암호화해야 합니다.
 -->
 
-If you have an `TextEncryptor` that you want to use, you can add it to the `TextEncryptorFactories` before starting your application.
+The default password and salt are public in the source code, so they only obscure values.
+You can override them with a system property or an environment variable. After changing them, values encrypted with the old key no longer decrypt and must be re-encrypted.
 
-You can add multiple TextEncrpytors, and if you only add one, that `TextEncrptor` will be the default textEncryptor; if you add multiple, you can specify one of them as the default `TextEncryptor` .
+| system property | environment variable | default |
+| ------------- | ------------- | ------------- |
+| `bluesky-boot.crypto.password` | `BLUESKY_BOOT_CRYPTO_PASSWORD` | `pass` |
+| `bluesky-boot.crypto.salt` | `BLUESKY_BOOT_CRYPTO_SALT` | `076e1bf7569c999e` (hex) |
+
+<!--
+사용하려는 `TextEncryptor` 가 있다면 application 시작 전에 앱 전체가 함께 쓰는 `TextEncryptorFactories.getDelegatingTextEncryptor()` 에 추가하면 됩니다.
+설정 복호화, `DecryptPropertySourceFactory`, connection-info, dev-check 화면이 모두 같은 인스턴스를 씁니다.
+
+기본 encryptor 를 바꾸려면 `META-INF/spring.factories` 에 `BlueskyTextEncryptor` 구현을 등록하고 하나에 `isDefaultEncryptor()` 를 true 로 두면 됩니다.
+-->
+
+If you have a `TextEncryptor` that you want to use, add it to the shared `TextEncryptorFactories.getDelegatingTextEncryptor()` before starting your application.
+Property decryption, `DecryptPropertySourceFactory`, connection-info and the dev-check pages all use that same instance.
+
+To change the default encryptor, register `BlueskyTextEncryptor` implementations in `META-INF/spring.factories` and return true from `isDefaultEncryptor()` on one of them.
 
 
 ```java
 @SpringBootApplication
 public class Application {
 	public static void main(String[] args) throws Throwable {
-		TextEncryptorFactories.createDelegatingTextEncryptor("encryptorId", encryptor);
+		TextEncryptorFactories.getDelegatingTextEncryptor().addTextEncryptor("encryptorId", encryptor);
 		SpringApplication.run(Application.class, args);
 	}
 }
@@ -173,3 +188,4 @@ public class SomeConfiguration {
 | ------------- | ------------- |
 | 3.1.0 | Java 17, Spring Boot 3.1.0 |
 | 3.4.0 | Java 17, Spring Boot 3.4.0 |
+| 4.1.0 | Java 25, Spring Boot 4.1 |

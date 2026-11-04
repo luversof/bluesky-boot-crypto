@@ -1,8 +1,8 @@
 package io.github.luversof.boot.security.crypto.encrypt;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,7 +61,7 @@ public class DelegatingTextEncryptor implements TextEncryptor {
 		
 		for (String id : textEncryptorMap.keySet()) {
 			if (id == null) {
-				continue;
+				throw new IllegalArgumentException("id cannot be null");
 			}
 			if (!idPrefix.isEmpty() && id.contains(idPrefix)) {
 				throw new IllegalArgumentException("id " + id + " cannot contain " + idPrefix);
@@ -72,7 +72,8 @@ public class DelegatingTextEncryptor implements TextEncryptor {
 		}
 		
 		this.defaultTextEncryptorId = defaultTextEncryptorId;
-		this.textEncryptorMap = new HashMap<>(textEncryptorMap);
+		// main 에서 addTextEncryptor 로 늘릴 수 있고 요청 스레드가 동시에 읽는다
+		this.textEncryptorMap = new ConcurrentHashMap<>(textEncryptorMap);
 		this.idPrefix = idPrefix;
 		this.idSuffix = idSuffix;
 	}
@@ -144,7 +145,7 @@ public class DelegatingTextEncryptor implements TextEncryptor {
 			return encryptedText;
 		}
 		
-		return encryptedText.substring(end + 1);
+		return encryptedText.substring(end + this.idSuffix.length());
 	}
 	
 	/**
