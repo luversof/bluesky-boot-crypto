@@ -31,8 +31,6 @@ public class DecryptEnvironmentPostProcessor implements EnvironmentPostProcessor
 	
 	private static final Pattern COLLECTION_PROPERTY = Pattern.compile("(\\S+)?\\[(\\d+)\\](\\.\\S+)?");	// NOSONAR java:S5852 분리하여 패턴 개선을 할 수 있으나 Spring Cloud의 코드를 그대로 사용한 부분이기 때문에 수정하지 않음
 
-	private final int order = Ordered.LOWEST_PRECEDENCE;
-	
 	private final DelegatingTextEncryptor textEncryptor;
 	
 	public DecryptEnvironmentPostProcessor() {
@@ -41,7 +39,7 @@ public class DecryptEnvironmentPostProcessor implements EnvironmentPostProcessor
 
 	@Override
 	public int getOrder() {
-		return this.order;
+		return Ordered.LOWEST_PRECEDENCE;
 	}
 	
 	@Override
