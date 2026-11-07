@@ -19,54 +19,76 @@ import io.github.luversof.boot.security.crypto.support.DecryptPropertySourceFact
 
 class DecryptEnvironmentPostProcessorTests {
 
-	@Test
-	void decryptsEncryptedPropertiesAndLeavesOthers() {
-		var encrypted = TextEncryptorFactories.getDelegatingTextEncryptor().encrypt("db-password");
-		var environment = new StandardEnvironment();
-		environment.getPropertySources().addFirst(new MapPropertySource("test",
-				Map.of("app.password", encrypted, "app.plain", "as-is", "app.list[0]", encrypted, "app.list[1]", "second")));
+  @Test
+  void decryptsEncryptedPropertiesAndLeavesOthers() {
+    var encrypted = TextEncryptorFactories.getDelegatingTextEncryptor().encrypt("db-password");
+    var environment = new StandardEnvironment();
+    environment
+        .getPropertySources()
+        .addFirst(
+            new MapPropertySource(
+                "test",
+                Map.of(
+                    "app.password",
+                    encrypted,
+                    "app.plain",
+                    "as-is",
+                    "app.list[0]",
+                    encrypted,
+                    "app.list[1]",
+                    "second")));
 
-		new DecryptEnvironmentPostProcessor().postProcessEnvironment(environment, new SpringApplication());
+    new DecryptEnvironmentPostProcessor()
+        .postProcessEnvironment(environment, new SpringApplication());
 
-		assertThat(environment.getProperty("app.password")).isEqualTo("db-password");
-		assertThat(environment.getProperty("app.plain")).isEqualTo("as-is");
-		assertThat(environment.getProperty("app.list[0]")).isEqualTo("db-password");
-		assertThat(environment.getProperty("app.list[1]")).isEqualTo("second");
-	}
+    assertThat(environment.getProperty("app.password")).isEqualTo("db-password");
+    assertThat(environment.getProperty("app.plain")).isEqualTo("as-is");
+    assertThat(environment.getProperty("app.list[0]")).isEqualTo("db-password");
+    assertThat(environment.getProperty("app.list[1]")).isEqualTo("second");
+  }
 
-	@Test
-	void usesEncryptorsAddedToTheSharedInstance() {
-		// 예전에는 이 후처리기가 자기 인스턴스를 따로 만들어 main 에서 추가한 encryptor 를 못 봤다
-		TextEncryptorFactories.getDelegatingTextEncryptor().addTextEncryptor("eppTestNoOp", Encryptors.noOpText());
-		var environment = new StandardEnvironment();
-		environment.getPropertySources().addFirst(new MapPropertySource("test", Map.of("app.value", "{eppTestNoOp}plain")));
+  @Test
+  void usesEncryptorsAddedToTheSharedInstance() {
+    // 예전에는 이 후처리기가 자기 인스턴스를 따로 만들어 main 에서 추가한 encryptor 를 못 봤다
+    TextEncryptorFactories.getDelegatingTextEncryptor()
+        .addTextEncryptor("eppTestNoOp", Encryptors.noOpText());
+    var environment = new StandardEnvironment();
+    environment
+        .getPropertySources()
+        .addFirst(new MapPropertySource("test", Map.of("app.value", "{eppTestNoOp}plain")));
 
-		new DecryptEnvironmentPostProcessor().postProcessEnvironment(environment, new SpringApplication());
+    new DecryptEnvironmentPostProcessor()
+        .postProcessEnvironment(environment, new SpringApplication());
 
-		assertThat(environment.getProperty("app.value")).isEqualTo("plain");
-	}
+    assertThat(environment.getProperty("app.value")).isEqualTo("plain");
+  }
 
-	@Test
-	void brokenCipherTextFailsWithTheKeyName() {
-		var environment = new StandardEnvironment();
-		environment.getPropertySources().addFirst(new MapPropertySource("test", Map.of("app.broken", "{text}zz")));
+  @Test
+  void brokenCipherTextFailsWithTheKeyName() {
+    var environment = new StandardEnvironment();
+    environment
+        .getPropertySources()
+        .addFirst(new MapPropertySource("test", Map.of("app.broken", "{text}zz")));
 
-		var processor = new DecryptEnvironmentPostProcessor();
-		var application = new SpringApplication();
+    var processor = new DecryptEnvironmentPostProcessor();
+    var application = new SpringApplication();
 
-		assertThatThrownBy(() -> processor.postProcessEnvironment(environment, application))
-				.isInstanceOf(IllegalStateException.class)
-				.hasMessageContaining("app.broken");
-	}
+    assertThatThrownBy(() -> processor.postProcessEnvironment(environment, application))
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessageContaining("app.broken");
+  }
 
-	@Test
-	void propertySourceFactoryDecrypts() throws Exception {
-		var encrypted = TextEncryptorFactories.getDelegatingTextEncryptor().encrypt("mongo-password");
-		var resource = new EncodedResource(new ByteArrayResource(("k1=" + encrypted + "\nk2=plain").getBytes(StandardCharsets.UTF_8)));
+  @Test
+  void propertySourceFactoryDecrypts() throws Exception {
+    var encrypted = TextEncryptorFactories.getDelegatingTextEncryptor().encrypt("mongo-password");
+    var resource =
+        new EncodedResource(
+            new ByteArrayResource(
+                ("k1=" + encrypted + "\nk2=plain").getBytes(StandardCharsets.UTF_8)));
 
-		var source = new DecryptPropertySourceFactory().createPropertySource("test", resource);
+    var source = new DecryptPropertySourceFactory().createPropertySource("test", resource);
 
-		assertThat(source.getProperty("k1")).isEqualTo("mongo-password");
-		assertThat(source.getProperty("k2")).isEqualTo("plain");
-	}
+    assertThat(source.getProperty("k1")).isEqualTo("mongo-password");
+    assertThat(source.getProperty("k2")).isEqualTo("plain");
+  }
 }

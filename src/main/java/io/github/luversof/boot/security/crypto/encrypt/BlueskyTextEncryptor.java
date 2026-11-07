@@ -4,10 +4,9 @@ import org.springframework.security.crypto.encrypt.TextEncryptor;
 
 public interface BlueskyTextEncryptor extends TextEncryptor {
 
-	String getEncryptorId();
-	
-	default boolean isDefaultEncryptor() {
-		return false;
-	}
+  String getEncryptorId();
 
+  default boolean isDefaultEncryptor() {
+    return false;
+  }
 }

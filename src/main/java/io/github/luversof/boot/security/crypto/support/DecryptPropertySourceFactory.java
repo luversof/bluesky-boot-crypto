@@ -15,34 +15,35 @@ import io.github.luversof.boot.security.crypto.factory.TextEncryptorFactories;
 
 public class DecryptPropertySourceFactory implements PropertySourceFactory {
 
-	private final DelegatingTextEncryptor textEncryptor =TextEncryptorFactories.getDelegatingTextEncryptor();
+  private final DelegatingTextEncryptor textEncryptor =
+      TextEncryptorFactories.getDelegatingTextEncryptor();
 
-	@Override
-	public PropertySource<?> createPropertySource(String name, EncodedResource resource) throws IOException {
-		var properties = PropertiesLoaderUtils.loadProperties(resource);
-		properties.replaceAll((_, value) -> {
-			String valueString = value.toString();
-			if (!textEncryptor.isEncrypted(valueString)) {
-				return value;
-			}
-			return textEncryptor.decrypt(valueString);
-		});
-		
-		String targetName = name;
-		
-		if (targetName == null) {
-			targetName = getNameForResource(resource.getResource());
-		}
-		
-		return new PropertiesPropertySource(targetName, properties);
-	}
-	
-	private static String getNameForResource(Resource resource) {
-		String name = resource.getDescription();
-		if (!StringUtils.hasText(name)) {
-			name = resource.getClass().getSimpleName() + "@" + System.identityHashCode(resource);
-		}
-		return name;
-	}
+  @Override
+  public PropertySource<?> createPropertySource(String name, EncodedResource resource)
+      throws IOException {
+    var properties = PropertiesLoaderUtils.loadProperties(resource);
+    properties.replaceAll((_, value) -> {
+      String valueString = value.toString();
+      if (!textEncryptor.isEncrypted(valueString)) {
+        return value;
+      }
+      return textEncryptor.decrypt(valueString);
+    });
 
+    String targetName = name;
+
+    if (targetName == null) {
+      targetName = getNameForResource(resource.getResource());
+    }
+
+    return new PropertiesPropertySource(targetName, properties);
+  }
+
+  private static String getNameForResource(Resource resource) {
+    String name = resource.getDescription();
+    if (!StringUtils.hasText(name)) {
+      name = resource.getClass().getSimpleName() + "@" + System.identityHashCode(resource);
+    }
+    return name;
+  }
 }
