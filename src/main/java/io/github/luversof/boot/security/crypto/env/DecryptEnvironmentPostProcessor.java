@@ -27,10 +27,9 @@ public class DecryptEnvironmentPostProcessor implements EnvironmentPostProcessor
   /** Name of the decrypted property source. */
   public static final String DECRYPTED_PROPERTY_SOURCE_NAME = "blueskyDecrypted";
 
+  // 분리하여 패턴 개선을 할 수 있으나 Spring Cloud의 코드를 그대로 사용한 부분이기 때문에 수정하지 않음
   private static final Pattern COLLECTION_PROPERTY =
-      Pattern.compile(
-          "(\\S+)?\\[(\\d+)\\](\\.\\S+)?"); // NOSONAR java:S5852 분리하여 패턴 개선을 할 수 있으나 Spring Cloud의
-  // 코드를 그대로 사용한 부분이기 때문에 수정하지 않음
+      Pattern.compile("(\\S+)?\\[(\\d+)\\](\\.\\S+)?"); // NOSONAR java:S5852 java:S8786
 
   private final DelegatingTextEncryptor textEncryptor;
 
@@ -109,6 +108,8 @@ public class DecryptEnvironmentPostProcessor implements EnvironmentPostProcessor
         } else if (COLLECTION_PROPERTY.matcher(key).matches()) {
           // put non-encrypted properties so merging of index properties
           // happens correctly
+          // and drop a lower encrypted value this higher plain value overrides
+          properties.remove(key);
           otherCollectionProperties.put(key, value);
         } else {
           // override previously encrypted with non-encrypted property

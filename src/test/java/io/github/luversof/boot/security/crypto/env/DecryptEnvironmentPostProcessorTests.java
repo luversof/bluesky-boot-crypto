@@ -48,6 +48,23 @@ class DecryptEnvironmentPostProcessorTests {
   }
 
   @Test
+  void higherPlainListValueOverridesLowerEncryptedOne() {
+    var encrypted = TextEncryptorFactories.getDelegatingTextEncryptor().encrypt("db-password");
+    var environment = new StandardEnvironment();
+    environment
+        .getPropertySources()
+        .addLast(new MapPropertySource("lower", Map.of("app.list[0]", encrypted)));
+    environment
+        .getPropertySources()
+        .addFirst(new MapPropertySource("higher", Map.of("app.list[0]", "plain")));
+
+    new DecryptEnvironmentPostProcessor()
+        .postProcessEnvironment(environment, new SpringApplication());
+
+    assertThat(environment.getProperty("app.list[0]")).isEqualTo("plain");
+  }
+
+  @Test
   void usesEncryptorsAddedToTheSharedInstance() {
     // 예전에는 이 후처리기가 자기 인스턴스를 따로 만들어 main 에서 추가한 encryptor 를 못 봤다
     TextEncryptorFactories.getDelegatingTextEncryptor()

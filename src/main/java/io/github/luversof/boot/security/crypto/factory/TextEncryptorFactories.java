@@ -39,10 +39,8 @@ public final class TextEncryptorFactories {
 
   private static final String DEFAULT_TEXT_ENCRYPTOR_ID = "text";
 
-  private static volatile DelegatingTextEncryptor
-      delegatingTextEncryptor; // NOSONAR java:S3077 double-checked locking 용 참조이고
-
-  // DelegatingTextEncryptor 는 final 필드와 ConcurrentHashMap 으로 스레드 안전함
+  // double-checked locking 용 참조이고 DelegatingTextEncryptor 는 final 필드와 ConcurrentHashMap 으로 스레드 안전함
+  private static volatile DelegatingTextEncryptor delegatingTextEncryptor; // NOSONAR java:S3077
 
   private TextEncryptorFactories() {}
 
