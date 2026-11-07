@@ -82,6 +82,12 @@
 	<profiles>
 		<profile>
 			<id>sonarqube</id>
+			<properties>
+				<sonar.projectKey>bluesky-boot-crypto</sonar.projectKey>
+				<sonar.projectName>bluesky boot crypto project</sonar.projectName>
+				<sonar.ws.timeout>300</sonar.ws.timeout>
+				<sonar.qualitygate.wait>true</sonar.qualitygate.wait>
+			</properties>
 			<build>
 				<pluginManagement>
 					<plugins>
