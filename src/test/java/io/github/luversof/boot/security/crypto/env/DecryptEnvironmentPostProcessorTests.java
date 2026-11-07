@@ -51,7 +51,10 @@ class DecryptEnvironmentPostProcessorTests {
 		var environment = new StandardEnvironment();
 		environment.getPropertySources().addFirst(new MapPropertySource("test", Map.of("app.broken", "{text}zz")));
 
-		assertThatThrownBy(() -> new DecryptEnvironmentPostProcessor().postProcessEnvironment(environment, new SpringApplication()))
+		var processor = new DecryptEnvironmentPostProcessor();
+		var application = new SpringApplication();
+
+		assertThatThrownBy(() -> processor.postProcessEnvironment(environment, application))
 				.isInstanceOf(IllegalStateException.class)
 				.hasMessageContaining("app.broken");
 	}

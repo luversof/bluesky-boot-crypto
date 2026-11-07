@@ -15,7 +15,7 @@ import io.github.luversof.boot.security.crypto.factory.TextEncryptorFactories;
 
 public class DecryptPropertySourceFactory implements PropertySourceFactory {
 
-	private DelegatingTextEncryptor textEncryptor = TextEncryptorFactories.getDelegatingTextEncryptor();
+	private final DelegatingTextEncryptor textEncryptor =TextEncryptorFactories.getDelegatingTextEncryptor();
 
 	@Override
 	public PropertySource<?> createPropertySource(String name, EncodedResource resource) throws IOException {
