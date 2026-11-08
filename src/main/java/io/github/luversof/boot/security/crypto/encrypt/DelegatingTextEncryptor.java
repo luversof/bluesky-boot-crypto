@@ -68,23 +68,25 @@ public class DelegatingTextEncryptor implements TextEncryptor {
               + textEncryptorMap);
     }
 
-    for (String id : textEncryptorMap.keySet()) {
-      if (id == null) {
-        throw new IllegalArgumentException("id cannot be null");
-      }
-      if (!idPrefix.isEmpty() && id.contains(idPrefix)) {
-        throw new IllegalArgumentException("id " + id + " cannot contain " + idPrefix);
-      }
-      if (id.contains(idSuffix)) {
-        throw new IllegalArgumentException("id " + id + " cannot contain " + idSuffix);
-      }
-    }
+    this.idPrefix = idPrefix;
+    this.idSuffix = idSuffix;
+    textEncryptorMap.keySet().forEach(this::checkId);
 
     this.defaultTextEncryptorId = defaultTextEncryptorId;
     // main 에서 addTextEncryptor 로 늘릴 수 있고 요청 스레드가 동시에 읽는다
     this.textEncryptorMap = new ConcurrentHashMap<>(textEncryptorMap);
-    this.idPrefix = idPrefix;
-    this.idSuffix = idSuffix;
+  }
+
+  private void checkId(String id) {
+    if (id == null) {
+      throw new IllegalArgumentException("id cannot be null");
+    }
+    if (!idPrefix.isEmpty() && id.contains(idPrefix)) {
+      throw new IllegalArgumentException("id " + id + " cannot contain " + idPrefix);
+    }
+    if (id.contains(idSuffix)) {
+      throw new IllegalArgumentException("id " + id + " cannot contain " + idSuffix);
+    }
   }
 
   @Override
@@ -96,7 +98,7 @@ public class DelegatingTextEncryptor implements TextEncryptor {
     return this.idPrefix
         + textEncryptorId
         + this.idSuffix
-        + this.textEncryptorMap.get(textEncryptorId).encrypt(text);
+        + getEncryptor(textEncryptorId).encrypt(text);
   }
 
   /** encryptedText는 textEncryptorId와 조합된 형태인 경우 해당 textEncryptor를 찾아 decrypt 처리 */
@@ -186,11 +188,13 @@ public class DelegatingTextEncryptor implements TextEncryptor {
 
   public DelegatingTextEncryptor addTextEncryptor(
       String textEncryptorId, TextEncryptor textEncryptor) {
+    checkId(textEncryptorId);
     this.textEncryptorMap.put(textEncryptorId, textEncryptor);
     return this;
   }
 
   public DelegatingTextEncryptor addTextEncryptor(Map<String, TextEncryptor> textEncryptorMap) {
+    textEncryptorMap.keySet().forEach(this::checkId);
     this.textEncryptorMap.putAll(textEncryptorMap);
     return this;
   }

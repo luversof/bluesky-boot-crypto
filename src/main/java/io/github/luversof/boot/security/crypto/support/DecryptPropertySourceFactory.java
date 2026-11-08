@@ -22,12 +22,16 @@ public class DecryptPropertySourceFactory implements PropertySourceFactory {
   public PropertySource<?> createPropertySource(String name, EncodedResource resource)
       throws IOException {
     var properties = PropertiesLoaderUtils.loadProperties(resource);
-    properties.replaceAll((_, value) -> {
+    properties.replaceAll((key, value) -> {
       String valueString = value.toString();
       if (!textEncryptor.isEncrypted(valueString)) {
         return value;
       }
-      return textEncryptor.decrypt(valueString);
+      try {
+        return textEncryptor.decrypt(valueString);
+      } catch (RuntimeException e) {
+        throw new IllegalStateException("Cannot decrypt: key=" + key, e);
+      }
     });
 
     String targetName = name;

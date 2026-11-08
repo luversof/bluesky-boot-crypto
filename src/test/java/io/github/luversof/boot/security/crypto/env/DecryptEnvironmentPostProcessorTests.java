@@ -108,4 +108,15 @@ class DecryptEnvironmentPostProcessorTests {
     assertThat(source.getProperty("k1")).isEqualTo("mongo-password");
     assertThat(source.getProperty("k2")).isEqualTo("plain");
   }
+
+  @Test
+  void propertySourceFactoryFailsWithTheKeyName() {
+    var resource =
+        new EncodedResource(new ByteArrayResource("k1={text}zz".getBytes(StandardCharsets.UTF_8)));
+    var factory = new DecryptPropertySourceFactory();
+
+    assertThatThrownBy(() -> factory.createPropertySource("test", resource))
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessageContaining("k1");
+  }
 }

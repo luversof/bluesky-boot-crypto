@@ -61,4 +61,24 @@ class DelegatingTextEncryptorTests {
 
     assertThat(mutable.decrypt("{other}x")).isEqualTo("x");
   }
+
+  @Test
+  void addRejectsIdContainingSuffix() {
+    // 예전에는 검사 없이 들어가 "{a}b}..." 를 복호화하지 못하고 암호문을 그대로 돌려줬다
+    var mutable = new DelegatingTextEncryptor("noop", Map.of("noop", Encryptors.noOpText()));
+    var noOp = Encryptors.noOpText();
+    var others = Map.of("c}d", noOp);
+
+    assertThatThrownBy(() -> mutable.addTextEncryptor("a}b", noOp))
+        .isInstanceOf(IllegalArgumentException.class);
+    assertThatThrownBy(() -> mutable.addTextEncryptor(others))
+        .isInstanceOf(IllegalArgumentException.class);
+  }
+
+  @Test
+  void encryptWithUnknownIdFailsWithTheId() {
+    assertThatThrownBy(() -> encryptor.encrypt("nope", "x"))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("nope");
+  }
 }

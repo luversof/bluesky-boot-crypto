@@ -46,10 +46,6 @@ public class DecryptEnvironmentPostProcessor implements EnvironmentPostProcessor
   public void postProcessEnvironment(
       ConfigurableEnvironment environment, SpringApplication application) {
 
-    if (textEncryptor == null || textEncryptor.isTextEncryptorMapEmpty()) {
-      return;
-    }
-
     var propertySources = environment.getPropertySources();
     environment.getPropertySources().remove(DECRYPTED_PROPERTY_SOURCE_NAME);
 
