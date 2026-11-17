@@ -7,7 +7,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
-import org.springframework.util.CollectionUtils;
 
 /**
  * 암복호화 처리를 복수로 사용할 수 있도록 제공하기 위해 사용 암호화된 text의 경우 prefix로 {암호화키}값 의 형태로 복호화 대상 textEncryptor를 추즉할 수
@@ -64,8 +63,8 @@ public class DelegatingTextEncryptor implements TextEncryptor {
       throw new IllegalArgumentException(
           "defaultTextEncryptorId "
               + defaultTextEncryptorId
-              + "is not found in textEncryptorMap"
-              + textEncryptorMap);
+              + " is not found in "
+              + textEncryptorMap.keySet());
     }
 
     this.idPrefix = idPrefix;
@@ -110,10 +109,6 @@ public class DelegatingTextEncryptor implements TextEncryptor {
       return encryptedText;
     }
 
-    if (!this.textEncryptorMap.containsKey(textEncryptorId)) {
-      return encryptedText;
-    }
-
     return this.textEncryptorMap.get(textEncryptorId).decrypt(extractEncryptedText(encryptedText));
   }
 
@@ -143,21 +138,9 @@ public class DelegatingTextEncryptor implements TextEncryptor {
     return textEncryptorId;
   }
 
+  /** {@link #extractTextEncryptorId} 가 ID 를 찾은 값에만 부른다. */
   private String extractEncryptedText(String encryptedText) {
-    if (encryptedText == null) {
-      return encryptedText;
-    }
-    int start = encryptedText.indexOf(this.idPrefix);
-    if (start != 0) {
-      return encryptedText;
-    }
-
-    int end = encryptedText.indexOf(this.idSuffix, start);
-    if (end < 0) {
-      return encryptedText;
-    }
-
-    return encryptedText.substring(end + this.idSuffix.length());
+    return encryptedText.substring(encryptedText.indexOf(this.idSuffix) + this.idSuffix.length());
   }
 
   /**
@@ -169,17 +152,10 @@ public class DelegatingTextEncryptor implements TextEncryptor {
   public TextEncryptor getEncryptor(String textEncryptorId) {
     if (!textEncryptorMap.containsKey(textEncryptorId)) {
       throw new IllegalArgumentException(
-          "textEncryptorId "
-              + textEncryptorId
-              + "is not found in textEncryptorMap"
-              + textEncryptorMap);
+          "textEncryptorId " + textEncryptorId + " is not found in " + textEncryptorMap.keySet());
     }
 
     return this.textEncryptorMap.get(textEncryptorId);
-  }
-
-  public boolean isTextEncryptorMapEmpty() {
-    return CollectionUtils.isEmpty(this.textEncryptorMap);
   }
 
   public Set<String> textEncryptorMapKeySet() {

@@ -3,8 +3,12 @@ package io.github.luversof.boot.security.crypto.factory;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.encrypt.Encryptors;
+
+import io.github.luversof.boot.security.crypto.encrypt.BlueskyTextEncryptor;
 
 class TextEncryptorFactoriesTests {
 
@@ -19,6 +23,39 @@ class TextEncryptorFactoriesTests {
   void defaultKeyStillDecryptsExistingValues() {
     var encryptor = TextEncryptorFactories.getDelegatingTextEncryptor();
 
+    assertThat(encryptor.decrypt(GOLDEN_TEXT)).isEqualTo("bluesky-golden");
+    assertThat(encryptor.decrypt(GOLDEN_DELUX)).isEqualTo("bluesky-golden");
+  }
+
+  @Test
+  void registeredEncryptorsKeepTheDefaultOnes() {
+    // 예전에는 spring.factories 로 등록하면 text·delux 가 빠져 기존 값이 암호문 그대로 넘어갔다
+    BlueskyTextEncryptor custom =
+        new BlueskyTextEncryptor() {
+          @Override
+          public String getEncryptorId() {
+            return "custom";
+          }
+
+          @Override
+          public boolean isDefaultEncryptor() {
+            return true;
+          }
+
+          @Override
+          public String encrypt(String text) {
+            return text;
+          }
+
+          @Override
+          public String decrypt(String encryptedText) {
+            return encryptedText;
+          }
+        };
+
+    var encryptor = TextEncryptorFactories.createFromBlueskyTextEncryptors(List.of(custom));
+
+    assertThat(encryptor.encrypt("x")).isEqualTo("{custom}x");
     assertThat(encryptor.decrypt(GOLDEN_TEXT)).isEqualTo("bluesky-golden");
     assertThat(encryptor.decrypt(GOLDEN_DELUX)).isEqualTo("bluesky-golden");
   }

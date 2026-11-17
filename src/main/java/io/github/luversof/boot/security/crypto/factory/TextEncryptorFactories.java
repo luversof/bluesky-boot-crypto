@@ -75,9 +75,13 @@ public final class TextEncryptorFactories {
   }
 
   private static DelegatingTextEncryptor createFromSpringFactoriesOrDefault() {
-    List<BlueskyTextEncryptor> blueskyTextEncryptorList =
+    return createFromBlueskyTextEncryptors(
         SpringFactoriesLoader.loadFactories(
-            BlueskyTextEncryptor.class, BlueskyTextEncryptor.class.getClassLoader());
+            BlueskyTextEncryptor.class, BlueskyTextEncryptor.class.getClassLoader()));
+  }
+
+  static DelegatingTextEncryptor createFromBlueskyTextEncryptors(
+      List<BlueskyTextEncryptor> blueskyTextEncryptorList) {
     if (blueskyTextEncryptorList.isEmpty()) {
       return createDelegatingTextEncryptor();
     }
@@ -86,12 +90,14 @@ public final class TextEncryptorFactories {
             .filter(BlueskyTextEncryptor::isDefaultEncryptor)
             .findFirst()
             .orElse(blueskyTextEncryptorList.getFirst());
-    Map<String, TextEncryptor> textEncryptorMap =
+    // 기본 text·delux 를 남겨 두어야 이미 저장된 값이 계속 풀린다
+    var textEncryptorMap = getDefaultTextEncryptorMap();
+    textEncryptorMap.putAll(
         blueskyTextEncryptorList.stream()
             .collect(
                 Collectors.toMap(
                     BlueskyTextEncryptor::getEncryptorId,
-                    blueskyTextEncryptor -> blueskyTextEncryptor));
+                    blueskyTextEncryptor -> blueskyTextEncryptor)));
     return createDelegatingTextEncryptor(defaultEncryptor.getEncryptorId(), textEncryptorMap);
   }
 
