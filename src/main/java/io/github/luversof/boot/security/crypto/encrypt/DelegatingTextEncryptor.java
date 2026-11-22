@@ -125,7 +125,7 @@ public class DelegatingTextEncryptor implements TextEncryptor {
       return null;
     }
 
-    int end = encryptedText.indexOf(this.idSuffix, start);
+    int end = encryptedText.indexOf(this.idSuffix, this.idPrefix.length());
     if (end < 0) {
       return null;
     }
@@ -140,7 +140,8 @@ public class DelegatingTextEncryptor implements TextEncryptor {
 
   /** {@link #extractTextEncryptorId} 가 ID 를 찾은 값에만 부른다. */
   private String extractEncryptedText(String encryptedText) {
-    return encryptedText.substring(encryptedText.indexOf(this.idSuffix) + this.idSuffix.length());
+    return encryptedText.substring(
+        encryptedText.indexOf(this.idSuffix, this.idPrefix.length()) + this.idSuffix.length());
   }
 
   /**

@@ -45,6 +45,16 @@ class DelegatingTextEncryptorTests {
   }
 
   @Test
+  void suffixStartingWithPrefixIsSearchedAfterThePrefix() {
+    // 예전에는 접미사를 0번부터 찾아 접두사 자리에서 잡혔다
+    var overlapping =
+        new DelegatingTextEncryptor("b", Map.of("b", Encryptors.noOpText()), "a", "ab");
+
+    assertThat(overlapping.isEncrypted("abc")).isFalse();
+    assertThat(overlapping.decrypt("ababvalue")).isEqualTo("value");
+  }
+
+  @Test
   void rejectsNullId() {
     var map = new HashMap<String, TextEncryptor>();
     map.put("a", Encryptors.noOpText());
